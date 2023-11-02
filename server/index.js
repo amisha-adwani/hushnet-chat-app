@@ -20,7 +20,10 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log(`user connected: ${socket.id}`);
-  console.log("Connection established");
+  socket.on("send_message", (msg) => {
+    socket.broadcast.emit('receive_message', msg)
+    console.log("message " + msg);
+  });
 });
 
 server.listen(3001, () => {
