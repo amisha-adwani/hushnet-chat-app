@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 export default function ChatBox(prop) {
   return (
     <div>
-      <Box height={500}></Box>
+      <Box height={500}>{prop.message}</Box>
       <Box
         display={{ base: "flex", md: "flex" }}
         alignItems="center"
@@ -17,7 +17,7 @@ export default function ChatBox(prop) {
       >
         <Grid container>
           <Grid item xs={11}>
-            <TextField fullWidth id="fullWidth" />
+            <TextField fullWidth id="fullWidth" onChange={prop.handleChange}/>
           </Grid>
           <Grid item xs>
             <Button variant="contained" onClick={prop.handleClick}>Send</Button>
