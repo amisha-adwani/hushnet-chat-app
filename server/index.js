@@ -2,10 +2,28 @@ const connectToMongo = require("./db");
 const http = require("http");
 const express = require("express");
 const { Server } = require("socket.io");
-
+const { auth, requiresAuth } = require('express-openid-connect');
+require('dotenv').config();
 connectToMongo();
-
 const app = express();
+
+app.use(
+  auth({
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.secret,
+    baseURL: process.env.baseURL,
+    clientID: process.env.clientID,
+    issuerBaseURL: process.env.issuerBaseURL,
+  })
+)
+
+app.get('/info', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+app.get('/profile',requiresAuth(),(req,res)=>{
+  res.send(JSON.stringify(req.oidc.user));
+})
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
