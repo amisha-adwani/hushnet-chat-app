@@ -6,6 +6,7 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
 export default function NavBar() {
+  const roomId = '1'
   return (
     <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
       <Toolbar
@@ -15,11 +16,7 @@ export default function NavBar() {
           alignItems: "center",
         }}
       >
-        <IconButton
-          color="inherit"
-          variant="link"
-          href="/room"
-        >
+        <IconButton color="inherit" variant="link" href={`/room/${roomId}`}>
           <AllInboxIcon />
         </IconButton>
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import ChatBox from '../components/ChatBox'
 
-const Solo = ({handleClick,handleChange}) => {
+const Solo = () => {
   return (
     <div>
-      <ChatBox handleClick={handleClick} handleChange={handleChange}/>
+      <ChatBox/>
     </div>
   )
 }

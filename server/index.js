@@ -42,6 +42,11 @@ io.on("connection", (socket) => {
     socket.broadcast.emit('receive_message', msg)
     console.log("message " + msg);
   });
+    socket.on('join-room',({roomId}) =>{
+      socket.join(roomId)
+      console.log(`user ${socket.id} joined room ${roomId}`);
+    })
+
 });
 
 server.listen(3001, () => {
