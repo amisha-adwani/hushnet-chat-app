@@ -5,18 +5,19 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
 
-const ChatBox = () => {
+const ChatBox = ({roomId}) => {
   const context = useContext(ChatContext);
   const { message, setMessage, setMessageReceived, messageReceived, socket } = context;
   const handleClick = () => {
-    socket.emit("send_message", message);
+    roomId === null ? socket.emit("send_message", {message}) : socket.emit("send_message", {message, roomId});
   };
   const handleChange = (e) => {
+    e.preventDefault()
     setMessage(e.target.value);
   };
   useEffect(() => {
-    socket.on("receive_message", (msg) => {
-      setMessageReceived(msg);
+    socket.on("receive_message", (message) => {
+      setMessageReceived(message);
     });
   }, []);
 

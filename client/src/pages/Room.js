@@ -15,7 +15,7 @@ const Room = () => {
   return (
     <div>
       Room {roomId}
-      <ChatBox />
+      <ChatBox roomId={roomId}/>
     </div>
   );
 };

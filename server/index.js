@@ -38,17 +38,22 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log(`user connected: ${socket.id}`);
-  socket.on("send_message", (msg) => {
-    socket.broadcast.emit('receive_message', msg)
-    console.log("message " + msg);
+  socket.on("send_message", ({message,roomId}) => {
+    let skt = socket.broadcast;
+    skt = roomId ? skt.to(roomId) : skt
+    skt.emit("receive_message", message)
+    console.log("message " + message);
+    console.log("roomId " + roomId);
   });
-    socket.on('join-room',({roomId}) =>{
-      socket.join(roomId)
-      console.log(`user ${socket.id} joined room ${roomId}`);
-    })
-
+  socket.on('join-room',({roomId}) =>{
+    socket.join(roomId)
+    console.log(`user ${socket.id} joined room ${roomId}`);
+  })
+  
 });
 
 server.listen(3001, () => {
   console.log("Example app listening at http://localhost:3001");
 });
+
+// socket.broadcast.to(roomId).emit('receive_message', msg);
