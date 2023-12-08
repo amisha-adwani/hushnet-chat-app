@@ -5,8 +5,10 @@ import IconButton from "@mui/material/IconButton";
 import InboxIcon from "@mui/icons-material/Inbox";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
+import ChatContext from "../context/ChatContext";
 export default function NavBar() {
-  const roomId = '1'
+  const context = React.useContext(ChatContext);
+  const { roomId } = context;
   return (
     <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
       <Toolbar

@@ -5,25 +5,33 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
 
-const ChatBox = ({roomId}) => {
+const ChatBox = ({ roomId }) => {
   const context = useContext(ChatContext);
-  const { message, setMessage, setMessageReceived, messageReceived, socket } = context;
+  const { message, setMessage, setMessageReceived, messageReceived, socket } =
+    context;
   const handleClick = () => {
-    roomId === null ? socket.emit("send_message", {message}) : socket.emit("send_message", {message, roomId});
+    roomId === null
+      ? socket.emit("send_message", { message })
+      : socket.emit("send_message", { message, roomId });
   };
   const handleChange = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setMessage(e.target.value);
   };
   useEffect(() => {
-    socket.on("receive_message", (message) => {
-      setMessageReceived(message);
+    socket.on("receive_message", (newMessage) => {
+      setMessageReceived((prevMessages) => [...prevMessages, newMessage]);
+      console.log(messageReceived)
     });
-  }, []);
+  }, [socket, messageReceived]);
 
   return (
     <div>
-      <Box height={450}>{messageReceived}</Box>
+      <Box height={450}>
+        {messageReceived.map((msg, index) => (
+          <div key={index}>{msg}</div>
+        ))}
+      </Box>
       <Box
         display={{ base: "flex", md: "flex" }}
         alignItems="center"
