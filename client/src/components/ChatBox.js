@@ -1,35 +1,42 @@
-import { React, useContext, useEffect } from "react";
+import React, { useContext, useEffect, useCallback } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
+import { useParams } from "react-router-dom";
 
-const ChatBox = ({ roomId }) => {
+const ChatBox = () => {
   const context = useContext(ChatContext);
   const { message, setMessage, setMessageReceived, messageReceived, socket } =
     context;
+  const { roomId } = useParams();
+  useEffect(() => {
+    socket.on("receive_message", (data) => {
+      setMessageReceived((prevMessages) => [
+        ...prevMessages,
+        { message: data.message, senderId: data.senderId },
+      ]);
+    });
+
+    return () => {
+      socket.off("receive_message");
+    };
+  }, [socket, setMessageReceived]);
+
   const handleClick = () => {
-    roomId === null
-      ? socket.emit("send_message", { message })
-      : socket.emit("send_message", { message, roomId });
+    socket.emit("send_message", { message, roomId, senderId: socket.id });
   };
+
   const handleChange = (e) => {
-    e.preventDefault();
     setMessage(e.target.value);
   };
-  useEffect(() => {
-    socket.on("receive_message", (newMessage) => {
-      setMessageReceived((prevMessages) => [...prevMessages, newMessage]);
-      console.log(messageReceived)
-    });
-  }, [socket, messageReceived]);
 
   return (
     <div>
       <Box height={450}>
         {messageReceived.map((msg, index) => (
-          <div key={index}>{msg}</div>
+          <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>
         ))}
       </Box>
       <Box
@@ -54,4 +61,5 @@ const ChatBox = ({ roomId }) => {
     </div>
   );
 };
+
 export default ChatBox;

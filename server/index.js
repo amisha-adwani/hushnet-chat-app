@@ -37,32 +37,18 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(`user connected: ${socket.id}`);
-  socket.on("send_message", ({ message, roomId }) => {
-    let skt = socket.broadcast;
-    skt = roomId ? skt.to(roomId) : skt;
-    socket.emit("receive_message", message);
-    console.log("message " + message);
-    console.log("roomId " + roomId);
+  socket.on("send_message", ({ message, roomId, senderId }) => {
+    io.to(roomId).emit("receive_message", { message, senderId });
   });
-  socket.on("create-room", ({ newRoomId }) => {
-    socket.broadcast.emit("create-room", { newRoomId });
-    console.log(`user ${socket.id} created and joined new room ${newRoomId}`);
+  socket.on("create-room", ({ newRoomId, senderId }) => {
+    socket.broadcast.emit("create-room", { newRoomId, senderId });
   });
   socket.on("join-room", ({ roomId }) => {
     socket.join(roomId);
-    console.log(`user ${socket.id} joined room ${roomId}`);
-    console.log("roomid", roomId);
-    const allRooms = io.of("/").adapter.rooms;
-    const specificRoom = allRooms.get(roomId);
-    console.log(`Users in Room ${roomId}:`, specificRoom);
+    io.to(roomId).emit("user-joined", { userId: socket.id, roomId });
   });
 });
 
 server.listen(3001, () => {
   console.log("Example app listening at http://localhost:3001");
 });
-
-// socket.broadcast.to(roomId).emit('receive_message', msg);
-// const allRooms = io.of("/").adapter.rooms;
-// console.log('All Rooms:', allRooms);
