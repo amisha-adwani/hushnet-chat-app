@@ -40,12 +40,11 @@ io.on("connection", (socket) => {
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
   });
-  socket.on("create-room", ({ newRoomId, senderId }) => {
-    socket.broadcast.emit("create-room", { newRoomId, senderId });
+  socket.on("create-room", ({ newRoomId }) => {
+    socket.broadcast.emit("create-room", { newRoomId });
   });
   socket.on("join-room", ({ roomId }) => {
     socket.join(roomId);
-    io.to(roomId).emit("user-joined", { userId: socket.id, roomId });
   });
 });
 

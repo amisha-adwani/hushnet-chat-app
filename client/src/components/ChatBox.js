@@ -26,6 +26,7 @@ const ChatBox = () => {
 
   const handleClick = () => {
     socket.emit("send_message", { message, roomId, senderId: socket.id });
+    setMessage("");
   };
 
   const handleChange = (e) => {
@@ -49,7 +50,7 @@ const ChatBox = () => {
       >
         <Grid container>
           <Grid item xs={11}>
-            <TextField fullWidth id="fullWidth" onChange={handleChange} />
+            <TextField fullWidth id="fullWidth" onChange={handleChange}value={message} />
           </Grid>
           <Grid item xs>
             <Button variant="contained" onClick={handleClick}>
