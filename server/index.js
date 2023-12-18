@@ -3,6 +3,9 @@ const http = require("http");
 const express = require("express");
 const { Server } = require("socket.io");
 const { auth, requiresAuth } = require("express-openid-connect");
+const Room = require("./models/Room");
+const router = require('./routes/room')
+const cors = require('cors')
 require("dotenv").config();
 connectToMongo();
 const app = express();
@@ -17,7 +20,8 @@ app.use(
     issuerBaseURL: process.env.issuerBaseURL,
   })
 );
-
+ 
+app.use(cors())
 app.get("/info", (req, res) => {
   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
 });
@@ -35,12 +39,18 @@ const io = new Server(server, {
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
-
+app.use('/', router)
 io.on("connection", (socket) => {
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
   });
-  socket.on("create-room", ({ newRoomId }) => {
+  socket.on("create-room", ({ newRoomId,senderId }) => {
+    const room = new Room ({
+      name: 'Test',
+      roomId:newRoomId,
+      userId :senderId
+    })
+    room.save()
     socket.broadcast.emit("create-room", { newRoomId });
   });
   socket.on("join-room", ({ roomId }) => {

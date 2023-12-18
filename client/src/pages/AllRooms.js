@@ -10,12 +10,19 @@ const AllRooms = () => {
   const navigate = useNavigate();
   const newRoomId = (Math.random() * 10).toFixed(4);
   const newRoom = () => {
-    socket.emit("create-room", { newRoomId: newRoomId });
+    socket.emit("create-room", { newRoomId: newRoomId, senderId: socket.id });
     // navigate(`/room/${newRoomId}`);
     setRooms([...rooms, newRoomId]);
     setNewRoomId(newRoomId);
-    console.log(newRoomId);
   };
+  useEffect(() => {
+    async function fetchRooms() {
+      const res = await fetch("http://localhost:3001/room");
+      const {rooms} = await res.json();
+      setRooms(rooms)
+    }
+    fetchRooms();
+  }, []);
   useEffect(() => {
     const handleCreateRoom = ({ newRoomId }) => {
       setRooms((prevRooms) => [...prevRooms, newRoomId]);
@@ -29,13 +36,13 @@ const AllRooms = () => {
   return (
     <div>
       <h1> All Rooms</h1>
-      {rooms.map((room) => (
+      {rooms && rooms.map((room) => (
         <Button
           variant="outlined"
-          key={room}
-          onClick={() => navigate(`/room/${room}`)}
+          key={room._id}
+          onClick={() => navigate(`/room/${room.roomId}`)}
         >
-          Room {room}
+          Room {room.roomId}
         </Button>
       ))}
       <Button variant="contained" onClick={newRoom}>
