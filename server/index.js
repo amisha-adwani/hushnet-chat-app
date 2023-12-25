@@ -22,12 +22,6 @@ app.use(
 );
  
 app.use(cors())
-app.get("/info", (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
-});
-app.get("/profile", requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
-});
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -39,7 +33,7 @@ const io = new Server(server, {
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
-app.use('/', router)
+app.use('/room', router)
 io.on("connection", (socket) => {
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
