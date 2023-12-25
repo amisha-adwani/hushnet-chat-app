@@ -9,17 +9,6 @@ const cors = require('cors')
 require("dotenv").config();
 connectToMongo();
 const app = express();
-
-app.use(
-  auth({
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.secret,
-    baseURL: process.env.baseURL,
-    clientID: process.env.clientID,
-    issuerBaseURL: process.env.issuerBaseURL,
-  })
-);
  
 app.use(cors())
 const server = http.createServer(app);
