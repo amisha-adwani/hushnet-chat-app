@@ -17,7 +17,7 @@ const AllRooms = () => {
   };
   useEffect(() => {
     async function fetchRooms() {
-      const res = await fetch("http://localhost:3001/room");
+      const res = await fetch("https://hushnet.onrender.com/room");
       const {rooms} = await res.json();
       setRooms(rooms)
     }
