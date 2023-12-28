@@ -14,7 +14,7 @@ app.use(cors())
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Specify the allowed origin
+    origin: "https://hushnet.onrender.com", // Specify the allowed origin
     methods: ["GET", "POST"],
   },
 });
