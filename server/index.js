@@ -40,7 +40,8 @@ io.on("connection", (socket) => {
     socket.join(roomId);
   });
 });
+const port = process.env.PORT || 3001;
 
-server.listen(3001, () => {
-  console.log("Example app listening at http://localhost:3001");
+server.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
 });
