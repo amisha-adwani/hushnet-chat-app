@@ -14,7 +14,11 @@ app.use(cors())
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
+<<<<<<< HEAD
     origin: ["https://hushnet-frontend.onrender.com", "http://localhost:3000"],
+=======
+    origin: ["https://hushnet.onrender.com", "http://localhost:3000"],
+>>>>>>> 466439f7151e7c7d81ebbd57d285b24913cdfed8
     methods: ["GET", "POST"],
   },
 });
