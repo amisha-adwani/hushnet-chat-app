@@ -1,7 +1,8 @@
 import { React, useState } from "react";
 import ChatContext from "./ChatContext";
 import io from "socket.io-client";
-const socket = io("https://hushnet.onrender.com");
+const URL = "https://hushnet.onrender.com";
+const socket = io(URL);
 const ChatState = (props) => {
   const [message, setMessage] = useState([]);
   const [messageReceived, setMessageReceived] = useState([]);
