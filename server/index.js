@@ -20,7 +20,6 @@ const io = new Server(server, {
   },
 });
 
-app.use("/room", router);
 //Deployment
 const __dirname1 = path.resolve();
 
@@ -36,6 +35,7 @@ if (process.env.NODE_ENV === "production") {
     res.send("Hello world");
   });
 }
+app.use("/room", router);
 const port = process.env.PORT || 3001;
 
 server.listen(port, () => {
