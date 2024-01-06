@@ -5,7 +5,6 @@
   "main": "\u001b[A",
   "scripts": {
     "start": "node index.js",
-    "build": "npm install && npm run build --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
