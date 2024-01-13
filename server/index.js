@@ -20,21 +20,7 @@ const io = new Server(server, {
   },
 });
 
-//Deployment
-const __dirname1 = path.resolve();
 app.use("/room", router);
-if (process.env.NODE_ENV === "production") {
-  const clientBuildPath = path.join(__dirname1, "client", "build");
-
-  app.use(express.static(clientBuildPath));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(clientBuildPath, "index.html"));
-  });
-} else {
-  app.get("/", (req, res) => {
-    res.send("Hello world");
-  });
-}
 
 const port = process.env.PORT || 3001;
 
