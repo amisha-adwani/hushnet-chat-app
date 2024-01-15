@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
 import { useParams } from "react-router-dom";
+import { Paper , Typography } from "@mui/material";
 
 const ChatBox = () => {
   const context = useContext(ChatContext);
@@ -35,30 +36,38 @@ const ChatBox = () => {
 
   return (
     <div>
-      <Box height={450}>
+      <Box  height={490} overflow="auto">
+      <Typography mt={9} ml={2}>
         {messageReceived.map((msg, index) => (
           <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>
         ))}
+      </Typography>
       </Box>
-      <Box
-        display={{ base: "flex", md: "flex" }}
-        alignItems="center"
-        p={5}
-        bg="white"
-        w={{ base: "100%", md: "68%" }}
-        borderRadius="lg"
-      >
-        <Grid container>
-          <Grid item xs={11}>
-            <TextField fullWidth id="fullWidth" onChange={handleChange}value={message} />
-          </Grid>
-          <Grid item xs>
-            <Button variant="contained" onClick={handleClick}>
-              Send
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
+        <Box
+          display={{ base: "flex", md: "flex" }}
+          alignItems="center"
+          ml={5}
+          mr={5}
+          mt={2}
+          w={{ base: "100%", md: "68%" }}
+        >
+          <TextField
+            fullWidth
+            id="fullWidth"
+            onChange={handleChange}
+            value={message}
+            
+          >
+            
+          </TextField>
+        <Button
+          variant="contained"
+          onClick={handleClick}
+          sx={{ textTransform: "none", m: 1 }}
+        >
+          Send
+        </Button>
+        </Box>
     </div>
   );
 };
