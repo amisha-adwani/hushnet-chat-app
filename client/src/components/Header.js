@@ -1,4 +1,4 @@
-import React from "react";
+import {React,useContext,useEffect} from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -9,16 +9,34 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { Icon } from "@mui/material";
+import { Button, Icon } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-
+import ChatContext from "../context/ChatContext";
+import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 const Header = ({headerName}) => {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const params = useParams();
+  const context = useContext(ChatContext);
+  const { socket } = context;
+  const navigate = useNavigate();
+  // const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  // const handleDrawerToggle = () => {
+  //   setMobileOpen(!mobileOpen);
+  // };
+
+
+  const senderId = socket.id
+const { roomId } = useParams();
+const handleClick = () => {
+  socket.emit("leave-room", { roomId, senderId }, () => {
+    console.log("user left");
+  });
+navigate('/room/');
+};
+
+  
   return (
     <div>
       <AppBar
@@ -26,34 +44,16 @@ const Header = ({headerName}) => {
         position="fixed"
       >
         <Toolbar>
-          <IconButton
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography sx={{ fontSize: "15px", overflowWrap: "break-word" }}>
           {headerName}
           </Typography>
+          <Button  variant="contained"
+          sx={{ textTransform: "none", m: 1 }} onClick={handleClick}>
+            Leave chat
+          </Button>
         </Toolbar>
         <Divider />
       </AppBar>
-      <Drawer
-        //   container={container}
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
-        }}
-        sx={{
-          display: { xs: "block", sm: "none" },
-          "& .MuiDrawer-paper": { boxSizing: "border-box" },
-        }}
-      >
-      </Drawer>
     </div>
   );
 };

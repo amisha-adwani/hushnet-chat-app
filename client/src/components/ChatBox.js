@@ -7,7 +7,7 @@ import ChatContext from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import { Paper , Typography } from "@mui/material";
 
-const ChatBox = () => {
+const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
   const { message, setMessage, setMessageReceived, messageReceived, socket } =
     context;
@@ -37,7 +37,12 @@ const ChatBox = () => {
   return (
     <div>
       <Box  height={490} overflow="auto">
-      <Typography mt={9} ml={2}>
+      <Typography component="div" mt={9} ml={2}>
+        {userNotification.map((message, index) => (
+          <div key={index}>{message}</div>
+        ))}
+      </Typography>
+      <Typography component="div" ml={2}>
         {messageReceived.map((msg, index) => (
           <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>
         ))}

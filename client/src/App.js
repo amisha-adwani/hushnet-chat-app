@@ -20,12 +20,17 @@ function App() {
   return (
     <div>
       <ChatState>
-        <Header headerName={headerName}/>
         <Router>
+        <Header headerName={headerName}/>
           <Routes>
             <Route path="/profile" element={<Profile onChangeHeader={handleHeaderChange}/>}></Route>
             <Route path="/room/" element={<AllRooms />}></Route>
-            <Route path="/room/:roomId" element={<Room onChangeHeader={handleHeaderChange}/>}></Route>
+            <Route path="/room/:roomId" element={
+              <>
+               <Header headerName={headerName} />
+                  <Room onChangeHeader={handleHeaderChange} />
+              </>
+}></Route>
           </Routes>
           <NavBar />
         </Router>
