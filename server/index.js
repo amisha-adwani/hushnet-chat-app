@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
   });
   socket.on("create-room", ({ newRoomId, senderId }) => {
     const room = new Room({
-      name: "Test",
       roomId: newRoomId,
       userId: senderId,
     });

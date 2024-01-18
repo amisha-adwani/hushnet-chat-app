@@ -30,9 +30,7 @@ const Header = ({headerName}) => {
   const senderId = socket.id
 const { roomId } = useParams();
 const handleClick = () => {
-  socket.emit("leave-room", { roomId, senderId }, () => {
-    console.log("user left");
-  });
+  socket.emit("leave-room", { roomId, senderId })
 navigate('/room/');
 };
 
