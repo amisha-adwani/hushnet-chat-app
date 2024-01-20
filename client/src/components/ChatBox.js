@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
 import { useParams } from "react-router-dom";
-import { Paper , Typography } from "@mui/material";
-
+import { Paper, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
   const { message, setMessage, setMessageReceived, messageReceived, socket } =
@@ -33,38 +33,57 @@ const ChatBox = ({ userNotification }) => {
   const handleChange = (e) => {
     setMessage(e.target.value);
   };
-
+  const navigate = useNavigate();
+  const senderId = socket.id;
+  const onHandleClick = () => {
+    socket.emit("leave-room", { roomId, senderId });
+    navigate("/room/");
+  };
+  const onDelete =()=>{
+  socket.emit('remove-room',{roomId})
+  }
   return (
     <div>
-      <Box  height={490} overflow="auto">
-      <Typography component="div" mt={9} ml={2}>
-        {userNotification.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
-      </Typography>
-      <Typography component="div" ml={2}>
-        {messageReceived.map((msg, index) => (
-          <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>
-        ))}
-      </Typography>
-      </Box>
-        <Box
-          display={{ base: "flex", md: "flex" }}
-          alignItems="center"
-          ml={5}
-          mr={5}
-          mt={2}
-          w={{ base: "100%", md: "68%" }}
+      <Box height={490} overflow="auto">
+        <Button
+          variant="contained"
+          sx={{ textTransform: "none", mt: 9 }}
+          onClick={onHandleClick}
         >
-          <TextField
-            fullWidth
-            id="fullWidth"
-            onChange={handleChange}
-            value={message}
-            
-          >
-            
-          </TextField>
+          Leave chat
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ textTransform: "none", mt: 9 }}
+          onClick={onDelete}
+        >
+          Delete room
+        </Button>
+        <Typography component="div"  ml={2}>
+          {userNotification.map((message, index) => (
+            <div key={index}>{message}</div>
+          ))}
+        </Typography>
+        <Typography component="div" ml={2}>
+          {messageReceived.map((msg, index) => (
+            <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>
+          ))}
+        </Typography>
+      </Box>
+      <Box
+        display={{ base: "flex", md: "flex" }}
+        alignItems="center"
+        ml={5}
+        mr={5}
+        mt={2}
+        w={{ base: "100%", md: "68%" }}
+      >
+        <TextField
+          fullWidth
+          id="fullWidth"
+          onChange={handleChange}
+          value={message}
+        ></TextField>
         <Button
           variant="contained"
           onClick={handleClick}
@@ -72,7 +91,7 @@ const ChatBox = ({ userNotification }) => {
         >
           Send
         </Button>
-        </Box>
+      </Box>
     </div>
   );
 };

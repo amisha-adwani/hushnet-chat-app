@@ -22,8 +22,12 @@ const io = new Server(server, {
 
 app.use("/room", router);
 
-
+const user={}
 io.on("connection", (socket) => {
+  socket.on('user-joined', username =>{
+    user[socket.id]= username
+    console.log(user[socket.id])
+  })
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
   });
@@ -35,10 +39,16 @@ io.on("connection", (socket) => {
     room.save();
     socket.broadcast.emit("create-room", { newRoomId });
   });
+  socket.on("remove-room", async ({ roomId, senderId }) => {
+    console.log(roomId)
+  const deleted = await Room.deleteOne({ roomId: roomId })
+    console.log(deleted)
+  });
+  // socket.broadcast.emit("room-removed", { newRoomId });
   socket.on("join-room", ({ roomId, senderId }) => {
     try {
       socket.join(roomId);
-      io.to(roomId).emit("user-join",  senderId );
+      io.to(roomId).emit("user-join",  {senderId: user[socket.id]}  );
     } catch (error) {
       console.log('[error]','join room :',error);
       socket.emit('error','couldnt perform requested action');
@@ -47,7 +57,7 @@ io.on("connection", (socket) => {
   socket.on("leave-room", ({ roomId, senderId }) => {
     try {
       socket.leave(roomId);
-      io.to(roomId).emit("user-left",  senderId );
+      io.to(roomId).emit("user-left",  {senderId: user[socket.id]} );
     } catch (error) {
       console.log('[error]','join room :',error);
       socket.emit('error','couldnt perform requested action');

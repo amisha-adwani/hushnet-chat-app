@@ -11,20 +11,20 @@ const Room = ({ onChangeHeader }) => {
   const roomId = params.roomId;
   const [userNotification, setUserNotification] = useState([]);
   useEffect(() => {
-    socket.on("user-join", (senderId) => {
+    socket.on("user-join", (data) => {
       setUserNotification((prevNotification) => [
         ...prevNotification,
-        `${senderId} has joined the room ${roomId}`,
+        `${data.senderId} has joined the room ${roomId}`,
       ]);
     });
-    socket.on("user-left", (senderId) => {
+    socket.on("user-left", (data) => {
       setUserNotification((prevNotification) => [
         ...prevNotification,
-        `${senderId} has left the room ${roomId}`,
+        `${data.senderId} has left the room ${roomId}`,
       ]);
     });
     socket.emit("join-room", { roomId, senderId });
-    onChangeHeader(`Room ${roomId}`);
+    onChangeHeader(`${roomId}`);
   }, [socket]);
 
   return (

@@ -6,8 +6,9 @@ const socket = io(URL);
 const ChatState = (props) => {
   const [message, setMessage] = useState([]);
   const [messageReceived, setMessageReceived] = useState([]);
-  const [roomId] = useState((Math.random() * 10).toFixed(4));
-  const [newRoomId, setNewRoomId] = useState(null);
+  const [username, setUsername] = useState("");
+  // const [roomId] = useState((Math.random() * 10).toFixed(4));
+  // const [newRoomId, setNewRoomId] = useState(null);
   return (
     <ChatContext.Provider
       value={{
@@ -16,9 +17,9 @@ const ChatState = (props) => {
         messageReceived,
         setMessageReceived,
         socket,
-        roomId,
-        setNewRoomId,
-        newRoomId
+        // roomId,
+        // setNewRoomId,
+        // newRoomId
       }}
     >
       {props.children}
