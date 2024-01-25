@@ -26,13 +26,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />}></Route>
             <Route path="/profile" element={<Profile onChangeHeader={handleHeaderChange}/>}></Route>
-            <Route path="/room/" element={<AllRooms />}></Route>
-            <Route path="/room/:roomId" element={
-              <>
-               {/* <Header headerName={headerName} /> */}
-                  <Room onChangeHeader={handleHeaderChange} />
-              </>
-}></Route>
+            <Route path="/room/" element={<AllRooms onChangeHeader={handleHeaderChange} />}></Route>
+            <Route path="/room/:roomId" element={ <Room onChangeHeader={handleHeaderChange} />}></Route>
           </Routes>
           <NavBar />
         </Router>

@@ -11,12 +11,10 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const context = useContext(ChatContext);
-  const { socket } = context;
-  const [username, setUsername] = useState("");
+  const { socket,setUsername,username } = context;
   const navigate = useNavigate();
   const handleClick = () => {
-    socket.emit("user-joined", username);
-    setUsername("");
+    socket.emit("user-joined", {username, senderId: socket.id});
     navigate('/room/');
   };
 

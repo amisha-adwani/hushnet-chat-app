@@ -2,28 +2,27 @@ import { React, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
 import ChatContext from "../context/ChatContext";
-import Header from "../components/Header";
 const Room = ({ onChangeHeader }) => {
   const params = useParams();
   const context = useContext(ChatContext);
-  const { socket } = context;
+  const { socket,username } = context;
   const senderId = socket.id;
   const roomId = params.roomId;
   const [userNotification, setUserNotification] = useState([]);
   useEffect(() => {
-    socket.on("user-join", (data) => {
+    socket.on("user-join", (username) => {
       setUserNotification((prevNotification) => [
         ...prevNotification,
-        `${data.senderId} has joined the room ${roomId}`,
+        `${username} has joined the room ${roomId}`,
       ]);
     });
-    socket.on("user-left", (data) => {
+    socket.on("user-left", (username) => {
       setUserNotification((prevNotification) => [
         ...prevNotification,
-        `${data.senderId} has left the room ${roomId}`,
+        `${username} has left the room ${roomId}`,
       ]);
     });
-    socket.emit("join-room", { roomId, senderId });
+    socket.emit("join-room", { roomId,username });
     onChangeHeader(`${roomId}`);
   }, [socket]);
 

@@ -6,10 +6,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
-
-const AllRooms = () => {
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+const AllRooms = ({ onChangeHeader }) => {
   const context = useContext(ChatContext);
-  const { socket} = context;
+  const { socket } = context;
   const [rooms, setRooms] = useState([]);
   const [open, setOpen] = useState(false);
   const [newRoomId, setNewRoomId] = useState("");
@@ -19,8 +24,6 @@ const AllRooms = () => {
   const handleChange = (e) => {
     setNewRoomId(e.target.value);
   };
-
-
 
   const newRoom = () => {
     socket.emit("create-room", { newRoomId, senderId: socket.id });
@@ -38,8 +41,9 @@ const AllRooms = () => {
   };
 
   useEffect(() => {
+    onChangeHeader("All Rooms");
     fetchRooms();
-    const handleCreateRoom = ({newRoomId}) => {
+    const handleCreateRoom = ({ newRoomId }) => {
       setRooms((prevRooms) => [...prevRooms, { roomId: newRoomId }]);
     };
 
@@ -66,46 +70,52 @@ const AllRooms = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
-      <div>
-        <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <TextField
-              id="outlined-basic"
-              label="Room Name"
-              variant="outlined"
-              onChange={handleChange}
-            />
-            <Button
-              id="modal-modal-description"
-              sx={{ m: 2 }}
-              variant="contained"
-              onClick={newRoom}
-            >
-              Save
-            </Button>
-          </Box>
-        </Modal>
-      </div>
-      <h1> All Rooms</h1>
-      {rooms.map((room) => (
-        <Button
-          variant="outlined"
-          key={String(room.roomId)}
-          onClick={() => navigate(`/room/${room.roomId}`)}
-        >
-          {room.roomId}
-        </Button>
-      ))}
-      <Button variant="contained" onClick={handleOpen}>
+    <>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography sx={{pb:1}}>Please enter a unique room name</Typography>
+          <TextField
+            id="outlined-basic"
+            label="Room Name"
+            variant="outlined"
+            onChange={handleChange}
+          />
+          <Button
+            id="modal-modal-description"
+            sx={{ m: 2 }}
+            variant="contained"
+            onClick={newRoom}
+          >
+            Save
+          </Button>
+        </Box>
+      </Modal>
+      <Button variant="contained" onClick={handleOpen} sx={{ mt: 9 }}>
         New Room
       </Button>
-    </div>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableBody>
+            {rooms.map((room) => (
+              <TableRow
+                key={room.roomId}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                onClick={() => navigate(`/room/${room.roomId}`)}
+              >
+                <TableCell component="th" scope="row">
+                  {room.roomId}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 

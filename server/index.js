@@ -2,8 +2,8 @@ const connectToMongo = require("./db");
 const http = require("http");
 const express = require("express");
 const { Server } = require("socket.io");
-const { auth, requiresAuth } = require("express-openid-connect");
 const Room = require("./models/Room");
+const User = require("./models/User");
 const router = require("./routes/room");
 const cors = require("cors");
 require("dotenv").config();
@@ -22,16 +22,29 @@ const io = new Server(server, {
 
 app.use("/room", router);
 
-const user={}
 io.on("connection", (socket) => {
-  socket.on('user-joined', username =>{
-    user[socket.id]= username
-    console.log(user[socket.id])
-  })
+  socket.on("user-joined", ({ username, senderId }) => {
+    const user = new User({
+      username: username,
+      userId: senderId,
+    });
+    user.save();
+    console.log(user);
+  });
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
   });
-  socket.on("create-room", ({ newRoomId, senderId }) => {
+  socket.on("create-room", async ({ newRoomId, senderId }) => {
+    const user = await User.findOne({ userId: senderId });
+    if (user) {
+      await User.findOneAndUpdate(
+        { userId: senderId },
+        { $push: { roomsOwned: newRoomId } }
+      );
+      console.log(await User.findOne({ userId: senderId }).select("roomsOwned"));
+    } else {
+      console.log("User not found");
+    }
     const room = new Room({
       roomId: newRoomId,
       userId: senderId,
@@ -40,27 +53,34 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("create-room", { newRoomId });
   });
   socket.on("remove-room", async ({ roomId, senderId }) => {
-    console.log(roomId)
-  const deleted = await Room.deleteOne({ roomId: roomId })
-    console.log(deleted)
-  });
-  // socket.broadcast.emit("room-removed", { newRoomId });
-  socket.on("join-room", ({ roomId, senderId }) => {
-    try {
-      socket.join(roomId);
-      io.to(roomId).emit("user-join",  {senderId: user[socket.id]}  );
-    } catch (error) {
-      console.log('[error]','join room :',error);
-      socket.emit('error','couldnt perform requested action');
+    const user = await User.findOne({ userId: senderId });
+    if (user && user.roomsOwned.includes(roomId)) {
+      console.log(roomId);
+      const deleted = await Room.deleteOne({ roomId: roomId });
+      console.log(deleted);
+    } else {
+      socket.emit("error", "You are not the owner of the room");
+      console.log("You are not the owner of the room");
     }
   });
-  socket.on("leave-room", ({ roomId, senderId }) => {
+  socket.on("join-room", ({ roomId, username }) => {
     try {
-      socket.leave(roomId);
-      io.to(roomId).emit("user-left",  {senderId: user[socket.id]} );
+      console.log(username,"joined")
+      socket.join(roomId);
+      io.to(roomId).emit("user-join", username);
     } catch (error) {
-      console.log('[error]','join room :',error);
-      socket.emit('error','couldnt perform requested action');
+      console.log("[error]", "join room :", error);
+      socket.emit("error", "couldnt perform requested action");
+    }
+  });
+  socket.on("leave-room", ({ roomId, username }) => {
+    try {
+      console.log(username,"left")
+      socket.leave(roomId);
+      io.to(roomId).emit("user-left", username);
+    } catch (error) {
+      console.log("[error]", "join room :", error);
+      socket.emit("error", "couldnt perform requested action");
     }
   });
 });
@@ -70,5 +90,3 @@ const port = process.env.PORT || 3001;
 server.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
-
-

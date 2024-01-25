@@ -40,7 +40,7 @@ const ChatBox = ({ userNotification }) => {
     navigate("/room/");
   };
   const onDelete =()=>{
-  socket.emit('remove-room',{roomId})
+  socket.emit('remove-room',{roomId, senderId})
   }
   return (
     <div>
