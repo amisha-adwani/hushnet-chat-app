@@ -29,7 +29,6 @@ io.on("connection", (socket) => {
       userId: senderId,
     });
     user.save();
-    console.log(user);
   });
   socket.on("send_message", ({ message, roomId, senderId }) => {
     io.to(roomId).emit("receive_message", { message, senderId });
@@ -41,9 +40,8 @@ io.on("connection", (socket) => {
         { userId: senderId },
         { $push: { roomsOwned: newRoomId } }
       );
-      console.log(await User.findOne({ userId: senderId }).select("roomsOwned"));
     } else {
-      console.log("User not found");
+      socket.emit("error", "You are not the owner of the room");
     }
     const room = new Room({
       roomId: newRoomId,
@@ -55,31 +53,24 @@ io.on("connection", (socket) => {
   socket.on("remove-room", async ({ roomId, senderId }) => {
     const user = await User.findOne({ userId: senderId });
     if (user && user.roomsOwned.includes(roomId)) {
-      console.log(roomId);
       const deleted = await Room.deleteOne({ roomId: roomId });
-      console.log(deleted);
     } else {
       socket.emit("error", "You are not the owner of the room");
-      console.log("You are not the owner of the room");
     }
   });
   socket.on("join-room", ({ roomId, username }) => {
     try {
-      console.log(username,"joined")
       socket.join(roomId);
       io.to(roomId).emit("user-join", username);
     } catch (error) {
-      console.log("[error]", "join room :", error);
       socket.emit("error", "couldnt perform requested action");
     }
   });
   socket.on("leave-room", ({ roomId, username }) => {
     try {
-      console.log(username,"left")
       socket.leave(roomId);
       io.to(roomId).emit("user-left", username);
     } catch (error) {
-      console.log("[error]", "join room :", error);
       socket.emit("error", "couldnt perform requested action");
     }
   });

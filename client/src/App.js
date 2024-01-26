@@ -12,13 +12,30 @@ import ChatState from "./context/ChatState";
 import AllRooms from "./pages/AllRooms";
 import Header from "./components/Header";
 import Home from './pages/Home'
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 function App() {
   const [headerName, setHeaderName] = React.useState("hushnet");
   const handleHeaderChange = (newHeader) => {
     setHeaderName(newHeader);
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#1C6AFC",
+        contrastText: "#FFFFFF"
+      },
+      secondary: {
+        main: "#FFFFFF",
+        contrastText: "#1A181E"
+      },
+    },
+    typography:{
+      fontFamily: ["Inter", "sans-serif"].join(","),
+    }
+  });
   return (
+    <ThemeProvider theme={theme}>
     <div>
       <ChatState>
         <Router>
@@ -33,6 +50,7 @@ function App() {
         </Router>
       </ChatState>
     </div>
+    </ThemeProvider>
   );
 }
 

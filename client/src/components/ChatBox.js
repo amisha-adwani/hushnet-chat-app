@@ -9,7 +9,7 @@ import { Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
-  const { message, setMessage, setMessageReceived, messageReceived, socket } =
+  const { message, setMessage, setMessageReceived, messageReceived, socket,setErrorMessage, errorMessage} =
     context;
   const { roomId } = useParams();
   useEffect(() => {
@@ -41,7 +41,12 @@ const ChatBox = ({ userNotification }) => {
   };
   const onDelete =()=>{
   socket.emit('remove-room',{roomId, senderId})
-  }
+  navigate("/room/");
+}
+const handleError = (error) => {
+  setErrorMessage(error);
+};
+socket.on('error',handleError)
   return (
     <div>
       <Box height={490} overflow="auto">
@@ -64,6 +69,9 @@ const ChatBox = ({ userNotification }) => {
             <div key={index}>{message}</div>
           ))}
         </Typography>
+        {errorMessage && <Typography component="div"  ml={2}>
+         Error: {errorMessage}
+        </Typography>}
         <Typography component="div" ml={2}>
           {messageReceived.map((msg, index) => (
             <div key={index}> {`${msg.senderId}: ${msg.message}`}</div>

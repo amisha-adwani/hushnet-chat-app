@@ -7,6 +7,7 @@ const ChatState = (props) => {
   const [message, setMessage] = useState([]);
   const [messageReceived, setMessageReceived] = useState([]);
   const [username, setUsername] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   return (
     <ChatContext.Provider
       value={{
@@ -16,7 +17,9 @@ const ChatState = (props) => {
         setMessageReceived,
         socket,
         username,
-        setUsername
+        setUsername,
+        errorMessage,
+        setErrorMessage
       }}
     >
       {props.children}
