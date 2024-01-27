@@ -32,7 +32,7 @@ const AllRooms = ({ onChangeHeader }) => {
 
   const fetchRooms = async () => {
     try {
-      const res = await fetch("http://localhost:3001/room");
+      const res = await fetch("https://hushnet.onrender.com/room");
       const { rooms } = await res.json();
       setRooms(rooms);
     } catch (error) {
@@ -52,7 +52,7 @@ const AllRooms = ({ onChangeHeader }) => {
     return () => {
       socket.off("create-room", handleCreateRoom);
     };
-  }, [socket, rooms]);
+  }, [socket, rooms,onChangeHeader]);
 
   const style = {
     position: "absolute",
@@ -95,11 +95,11 @@ const AllRooms = ({ onChangeHeader }) => {
           </Button>
         </Box>
       </Modal>
-      <Button variant="contained" onClick={handleOpen} sx={{ mt: 9 }}>
+      <Button variant="contained" onClick={handleOpen} sx={{ mt: 10, mb:2, ml: 2 }}>
         New Room
       </Button>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer component={Paper} sx={{ ml:2, width:'95%'}} >
+        <Table aria-label="simple table" >
           <TableBody>
             {rooms.map((room) => (
               <TableRow
@@ -107,8 +107,8 @@ const AllRooms = ({ onChangeHeader }) => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 onClick={() => navigate(`/room/${room.roomId}`)}
               >
-                <TableCell component="th" scope="row">
-                  {room.roomId}
+                <TableCell component="th" scope="row" sx={{cursor:'pointer', fontWeight:600}}>
+                 {room.roomId}
                 </TableCell>
               </TableRow>
             ))}

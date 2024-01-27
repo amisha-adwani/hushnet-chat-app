@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useCallback } from "react";
+import React, { useContext, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import ChatContext from "../context/ChatContext";
 import { useParams } from "react-router-dom";
-import { Paper, Typography } from "@mui/material";
+import {  Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
@@ -49,17 +48,17 @@ const handleError = (error) => {
 socket.on('error',handleError)
   return (
     <div>
-      <Box height={490} overflow="auto">
+      <Box height={490} overflow="auto" >
         <Button
           variant="contained"
-          sx={{ textTransform: "none", mt: 9 }}
+          sx={{ textTransform: "none", mt: 9, mr:2,ml: 2,mb:2}}
           onClick={onHandleClick}
         >
           Leave chat
         </Button>
         <Button
           variant="contained"
-          sx={{ textTransform: "none", mt: 9 }}
+          sx={{ textTransform: "none", mt: 9,mb:2 }}
           onClick={onDelete}
         >
           Delete room

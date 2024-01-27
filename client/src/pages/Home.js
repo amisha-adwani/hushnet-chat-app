@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -9,7 +9,7 @@ import { Typography } from "@mui/material";
 import ChatContext from "../context/ChatContext";
 import { useNavigate } from "react-router-dom";
 
-const Home = () => {
+const Home = ({onChangeHeader}) => {
   const context = useContext(ChatContext);
   const { socket,setUsername,username } = context;
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Home = () => {
     socket.emit("user-joined", {username, senderId: socket.id});
     navigate('/room/');
   };
-
+ onChangeHeader('hushnet')
   const handleChange = (e) => {
     e.preventDefault();
     setUsername(e.target.value);
