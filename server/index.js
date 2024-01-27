@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://hushnet.onrender.com",
+    origin: "https://hushnet-frontend.onrender.com",
     methods: ["GET", "POST"],
   },
 });
