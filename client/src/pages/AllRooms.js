@@ -41,7 +41,12 @@ const AllRooms = ({ onChangeHeader }) => {
   };
 
   useEffect(() => {
-    onChangeHeader("All Rooms");
+    if(username){
+      onChangeHeader(`welcome ${username}, join a chat or create your own`);
+    }
+    else{
+      onChangeHeader(`welcome Guest, join a chat or create your own`);
+    }
     fetchRooms();
     const handleCreateRoom = ({ newRoomId }) => {
       setRooms((prevRooms) => [...prevRooms, { roomId: newRoomId }]);
