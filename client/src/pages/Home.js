@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -17,7 +17,10 @@ const Home = ({onChangeHeader}) => {
     socket.emit("user-joined", {username, senderId: socket.id});
     navigate('/room/');
   };
- onChangeHeader('hushnet')
+  useEffect(() => {
+    onChangeHeader('hushnet')
+  }, [onChangeHeader]);
+
   const handleChange = (e) => {
     e.preventDefault();
     setUsername(e.target.value);

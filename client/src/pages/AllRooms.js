@@ -12,9 +12,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+const { REACT_APP_fetchURL } = process.env;
 const AllRooms = ({ onChangeHeader }) => {
   const context = useContext(ChatContext);
-  const { socket } = context;
+  const { socket,username } = context;
   const [rooms, setRooms] = useState([]);
   const [open, setOpen] = useState(false);
   const [newRoomId, setNewRoomId] = useState("");
@@ -31,8 +32,9 @@ const AllRooms = ({ onChangeHeader }) => {
   };
 
   const fetchRooms = async () => {
+    const fetchURL = process.env.REACT_APP_fetchURL
     try {
-      const res = await fetch("https://hushnet.onrender.com/room");
+      const res = await fetch(fetchURL);
       const { rooms } = await res.json();
       setRooms(rooms);
     } catch (error) {
@@ -41,12 +43,7 @@ const AllRooms = ({ onChangeHeader }) => {
   };
 
   useEffect(() => {
-    if(username){
       onChangeHeader(`welcome ${username}, join a chat or create your own`);
-    }
-    else{
-      onChangeHeader(`welcome Guest, join a chat or create your own`);
-    }
     fetchRooms();
     const handleCreateRoom = ({ newRoomId }) => {
       setRooms((prevRooms) => [...prevRooms, { roomId: newRoomId }]);

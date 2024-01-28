@@ -15,7 +15,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://hushnet-frontend.onrender.com",
+    origin: ["https://hushnet-frontend.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST"],
   },
 });
@@ -30,8 +30,8 @@ io.on("connection", (socket) => {
     });
     user.save();
   });
-  socket.on("send_message", ({ message, roomId, senderId }) => {
-    io.to(roomId).emit("receive_message", { message, senderId });
+  socket.on("send_message", ({ message, roomId, senderId,username }) => {
+    io.to(roomId).emit("receive_message", { message, senderId,username });
   });
   socket.on("create-room", async ({ newRoomId, senderId }) => {
     const user = await User.findOne({ userId: senderId });
