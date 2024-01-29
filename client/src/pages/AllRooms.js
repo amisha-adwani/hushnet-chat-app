@@ -12,7 +12,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-const { REACT_APP_fetchURL } = process.env;
 const AllRooms = ({ onChangeHeader }) => {
   const context = useContext(ChatContext);
   const { socket,username } = context;
@@ -32,8 +31,8 @@ const AllRooms = ({ onChangeHeader }) => {
   };
 
   const fetchRooms = async () => {
-    const fetchURL = process.env.REACT_APP_fetchURL
     try {
+      const fetchURL = "https://hushnet.onrender.com/room"
       const res = await fetch(fetchURL);
       const { rooms } = await res.json();
       setRooms(rooms);
