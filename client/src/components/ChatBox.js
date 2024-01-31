@@ -84,9 +84,7 @@ const ChatBox = ({ userNotification }) => {
         )}
         {errorMessage && (
           <Typography component="div" ml={2}>
-            {errorMessage.map((error, index) => (
-              <div key={index}>Error: {error}</div>
-            ))}
+            Error: {errorMessage}
           </Typography>
         )}
 
