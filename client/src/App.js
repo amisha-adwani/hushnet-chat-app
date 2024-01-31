@@ -32,7 +32,9 @@ function App() {
     },
     typography:{
       fontFamily: ["Inter", "sans-serif"].join(","),
-    }
+    },
+    root: {
+      }
   });
   return (
     <ThemeProvider theme={theme}>
