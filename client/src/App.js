@@ -41,10 +41,10 @@ function App() {
     <div>
       <ChatState>
         <Router>
-        <Header headerName={headerName}/>
+        <Header headerName={headerName} />
           <Routes>
             <Route path="/" element={<Home onChangeHeader={handleHeaderChange}/>}></Route>
-            <Route path="/profile" element={<Profile onChangeHeader={handleHeaderChange}/>}></Route>
+            <Route path="/profile" element={<Profile onChangeHeader={handleHeaderChange} />}></Route>
             <Route path="/room/" element={<AllRooms onChangeHeader={handleHeaderChange} />}></Route>
             <Route path="/room/:roomId" element={ <Room onChangeHeader={handleHeaderChange} />}></Route>
           </Routes>

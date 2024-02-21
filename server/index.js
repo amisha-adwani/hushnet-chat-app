@@ -34,26 +34,26 @@ io.on("connection", (socket) => {
     io.to(roomId).emit("receive_message", { message, senderId,username });
   });
   socket.on("create-room", async ({ newRoomId, senderId }) => {
+
+    const room = new Room({
+      roomId: newRoomId,
+      userId: senderId,
+    });
+    room.save();
+    socket.broadcast.emit("created-room", { newRoomId });
     const user = await User.findOne({ userId: senderId });
     if (user) {
       await User.findOneAndUpdate(
         { userId: senderId },
         { $push: { roomsOwned: newRoomId } }
       );
-    } else {
-      socket.emit("error", "You are not the owner of the room");
     }
-    const room = new Room({
-      roomId: newRoomId,
-      userId: senderId,
-    });
-    room.save();
-    socket.broadcast.emit("create-room", { newRoomId });
+   
   });
   socket.on("remove-room", async ({ roomId, senderId }) => {
     const user = await User.findOne({ userId: senderId });
     if (user && user.roomsOwned.includes(roomId)) {
-      const deleted = await Room.deleteOne({ roomId: roomId });
+       await Room.deleteOne({ roomId: roomId });
     } else {
       socket.emit("error", "You are not the owner of the room");
     }
@@ -75,6 +75,9 @@ io.on("connection", (socket) => {
     }
   });
 });
+app.get('/', (req, res) => {
+  req.send('Server is up and running')
+})
 
 const port = process.env.PORT || 3001;
 

@@ -6,7 +6,6 @@ const Room = ({ onChangeHeader }) => {
   const params = useParams();
   const context = useContext(ChatContext);
   const { socket,username } = context;
-  const senderId = socket.id;
   const roomId = params.roomId;
   const [userNotification, setUserNotification] = useState([]);
   useEffect(() => {
@@ -23,7 +22,7 @@ const Room = ({ onChangeHeader }) => {
       ]);
     });
     socket.emit("join-room", { roomId,username });
-    onChangeHeader(`${roomId}`);
+     onChangeHeader(`${roomId}`);
   }, [socket]);
 
   return (

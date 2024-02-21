@@ -6,6 +6,8 @@ import ChatContext from "../context/ChatContext";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import SendIcon from '@mui/icons-material/Send';
+
 const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
   const {
@@ -14,12 +16,11 @@ const ChatBox = ({ userNotification }) => {
     setMessageReceived,
     messageReceived,
     socket,
-    setErrorMessage,
-    errorMessage,
     username,
   } = context;
   const { roomId } = useParams();
   useEffect(() => {
+    setMessageReceived([])
     socket.on("receive_message", (data) => {
       setMessageReceived((prevMessages) => [
         ...prevMessages,
@@ -48,16 +49,13 @@ const ChatBox = ({ userNotification }) => {
   const senderId = socket.id;
   const onHandleClick = () => {
     socket.emit("leave-room", { roomId, senderId });
-    navigate("/room/");
+    navigate("/room");
   };
   const onDelete = () => {
     socket.emit("remove-room", { roomId, senderId });
-    navigate("/room/");
+    navigate("/room");
   };
-  const handleError = (error) => {
-    setErrorMessage(error);
-  };
-  socket.on("error", handleError);
+
   return (
     <div>
       <Box height={490} overflow="auto">
@@ -82,15 +80,11 @@ const ChatBox = ({ userNotification }) => {
             ))}
           </Typography>
         )}
-        {errorMessage && (
-          <Typography component="div" ml={2}>
-            Error: {errorMessage}
-          </Typography>
-        )}
 
         <Typography component="div" ml={2}>
           {messageReceived.map((msg, index) => (
             <Box
+            key={index}
               component="section"
               sx={{
                 p: 2,
@@ -102,7 +96,7 @@ const ChatBox = ({ userNotification }) => {
                 wordWrap: "break-word",
               }}
             >
-              <div key={index}> {`${msg.username}: ${msg.message}`}</div>
+              {`${msg.username}: ${msg.message}`}
             </Box>
           ))}
         </Typography>
@@ -110,25 +104,28 @@ const ChatBox = ({ userNotification }) => {
       <Box
         display={"flex"}
         alignItems="center"
-        ml={5}
-        mr={5}
-        mt={3}
-        w={{ base: "100%", md: "68%" }}
+         mx={5}
+        mt={2}
+        sx={{  border:'1px solid lightblue',boxShadow:"4px 4px 4px  lightgray"}}
+      
       >
         <TextField
-          fullWidth
-          id="fullWidth"
+        fullWidth
+          sx={{
+            "& fieldset": { border: 'none' }
+          }}
           onChange={handleChange}
           value={message}
+          placeholder="Enter message"
         ></TextField>
         <Button
-          variant="contained"
           onClick={handleClick}
-          sx={{ textTransform: "none", m: 1 }}
+          size="large"
+          sx={{ border:'none' }}
+          endIcon={<SendIcon />}
         >
-          Send
         </Button>
-      </Box>
+        </Box>
     </div>
   );
 };

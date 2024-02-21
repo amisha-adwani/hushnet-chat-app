@@ -6,7 +6,6 @@ const Profile = ({ onChangeHeader }) => {
   const context = useContext(ChatContext);
   const { username } = context;
     useEffect(() => {
-      // Example: Change the headerName based on some condition
       onChangeHeader("Profile");
     }, [onChangeHeader]);
   return (

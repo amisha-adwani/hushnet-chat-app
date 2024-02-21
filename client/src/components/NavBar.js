@@ -1,22 +1,18 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AllInboxIcon from "@mui/icons-material/AllInbox";
 import HomeIcon from "@mui/icons-material/Home";
-import { Link } from "react-router-dom";
-
+import { Link, useLocation } from "react-router-dom";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import FolderIcon from "@mui/icons-material/Folder";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
 
 export default function NavBar() {
+  const location = useLocation();
+  const [value, setValue] = React.useState(location.pathname);
 
-  const [value, setValue] = React.useState("home");
+  React.useEffect(() => {
+    setValue(location.pathname);
+  }, [location]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -43,7 +39,7 @@ export default function NavBar() {
         component={Link}
         to="/"
         label="Home"
-        value="home"
+        value="/"
         icon={<HomeIcon />}
       />
 
@@ -51,14 +47,14 @@ export default function NavBar() {
         component={Link}
         to="/room"
         label="Inbox"
-        value="inbox"
+        value="/room"
         icon={<AllInboxIcon />}
       />
       <BottomNavigationAction
         component={Link}
         to="/profile"
         label="Profile"
-        value="profile"
+        value="/profile"
         icon={<AccountCircleIcon />}
       />
     </BottomNavigation>
