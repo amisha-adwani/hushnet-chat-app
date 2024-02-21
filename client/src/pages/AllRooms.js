@@ -46,7 +46,7 @@ const AllRooms = ({ onChangeHeader }) => {
   const fetchRooms = async () => {
     try {
       setLoading(true); 
-      const fetchURL = "https://hushnet.onrender.com";
+      const fetchURL = "https://hushnet.onrender.com/room";
       const res = await fetch(fetchURL);
       const { rooms } = await res.json();
       setRooms(rooms);
