@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import SendIcon from '@mui/icons-material/Send';
-
+import Details from "./Avatar";
 const ChatBox = ({ userNotification }) => {
   const context = useContext(ChatContext);
   const {
@@ -58,7 +58,7 @@ const ChatBox = ({ userNotification }) => {
 
   return (
     <div>
-      <Box height={490} overflow="auto">
+      <Box height={530} overflow="auto">
         <Button
           variant="contained"
           sx={{ textTransform: "none", mt: 9, mr: 2, ml: 2, mb: 2 }}
@@ -87,16 +87,21 @@ const ChatBox = ({ userNotification }) => {
             key={index}
               component="section"
               sx={{
-                p: 2,
-                border: "1px dashed grey",
+                // p: 2,
                 mr: 2,
                 mt: 1,
+                display:'flex',
                 maxWidth: "30%",
-                ...(msg.senderId === socket.id && { ml: "auto" }),
+                ...(msg.senderId === socket.id && { pl: 162 }),
                 wordWrap: "break-word",
               }}
             >
-              {`${msg.username}: ${msg.message}`}
+              <Box sx={{...(msg.senderId === socket.id && { display: 'none' })}}>
+            <Details name={msg.username}/> 
+              </Box>
+            <Box sx={ {bgcolor:'primary.main',p: 2,color:'primary.contrastText', borderRadius:3,width:150}}>
+            {`${msg.username}: ${msg.message}`}
+              </Box> 
             </Box>
           ))}
         </Typography>
@@ -106,6 +111,7 @@ const ChatBox = ({ userNotification }) => {
         alignItems="center"
          mx={5}
         mt={2}
+        mb={8}
         sx={{  border:'1px solid lightblue',boxShadow:"4px 4px 4px  lightgray"}}
       
       >
