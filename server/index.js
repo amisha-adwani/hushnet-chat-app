@@ -5,10 +5,10 @@ const { Server } = require("socket.io");
 const Room = require("./models/Room");
 const User = require("./models/User");
 const router = require("./routes/room");
+const authRouter = require("./routes/auth")
 const cors = require("cors");
 require("dotenv").config();
 connectToMongo();
-const path = require("path");
 const app = express();
 app.use(cors());
 const server = http.createServer(app);
@@ -20,6 +20,7 @@ const io = new Server(server, {
   },
 });
 
+app.use('/auth', authRouter);
 app.use("/room", router);
 
 io.on("connection", (socket) => {
