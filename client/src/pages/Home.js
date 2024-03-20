@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import ChatContext from "../context/ChatContext";
 import { useNavigate } from "react-router-dom";
 import Modal2 from '../components/Modal'
+import SignUp from "../components/Signup";
  const Home = ({onChangeHeader}) => {
   const context = useContext(ChatContext);
   const { socket,setUsername,username } = context;
@@ -27,7 +28,8 @@ import Modal2 from '../components/Modal'
   
 
   return (
-    <Box >
+    <>
+    {/* <Box >
       <Modal2 name={username} title={'Please enter a username to begin'}
       handleChange={handleChange}
       open={open}
@@ -35,7 +37,9 @@ import Modal2 from '../components/Modal'
       onClose={handleClose}
       placeholder={username}
       display={'none'}/>
-    </Box>
+    </Box> */}
+    <SignUp/>
+    </>
   );
 };
 export default Home;
