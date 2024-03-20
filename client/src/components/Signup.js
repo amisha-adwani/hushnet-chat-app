@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from "react-router-dom";
+import Link from '@mui/material/Link';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -119,8 +120,14 @@ export default function SignUp() {
                 Signup
               </Button>
             </Box>
+            <Grid container>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Have an account? Sign In"}
+                </Link>
+              </Grid>
+            </Grid>
           </Box>
-          {/* <Copyright sx={{ mt: 5 }} /> */}
         </Container>
     );
   }
