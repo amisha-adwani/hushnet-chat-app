@@ -50,7 +50,7 @@ router.post(
       };
       const authToken = jwt.sign(data, JWT_SECRET);
       success = true;
-      res.json({ success, authToken });
+      res.json({ success, authToken, user });
     } catch (error) {
       console.error(error);
        return res.status(500).send("Error occured");
@@ -101,7 +101,7 @@ router.post(
 
       const authToken = jwt.sign(data, JWT_SECRET);
       success = true;
-      res.json({ success, authToken });
+      res.json({ success, authToken, user});
     } catch (error) {
       console.error(error);
        return res.status(500).send("Error occured");

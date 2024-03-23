@@ -22,10 +22,9 @@ const AllRooms = ({ onChangeHeader }) => {
   const context = useContext(ChatContext);
   const { socket, username ,
     setErrorMessage,
-    errorMessage,rooms, setRooms} = context;
+    errorMessage,rooms, setRooms, senderId, fetchRooms, loading} = context;
   const [open, setOpen] = useState(false);
   const [newRoomId, setNewRoomId] = useState("New Room");
-  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -39,23 +38,11 @@ const AllRooms = ({ onChangeHeader }) => {
   };
 
   const newRoom = () => {
-    socket.emit("create-room", { newRoomId, senderId: socket.id });
+    socket.emit("create-room", { newRoomId, senderId, username });
     handleClose();
     fetchRooms();
   };
-  const fetchRooms = async () => {
-    try {
-      setLoading(true); 
-      const fetchURL = "https://hushnet.onrender.com/room";
-      const res = await fetch(fetchURL);
-      const { rooms } = await res.json();
-      setRooms(rooms);
-    } catch (error) {
-      console.error("Error fetching rooms:", error);
-    } finally { 
-      setLoading(false); 
-    } 
-  };
+ 
   const handleCreateRoom = ({ newRoomId }) => {
     setRooms((prevRooms) => [...prevRooms,  newRoomId ]);
   };

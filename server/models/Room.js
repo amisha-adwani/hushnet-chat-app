@@ -5,9 +5,11 @@ const RoomSchema = new Schema({
     type: String,
     required: true,
   },
-  userId: {
-    type: String,
-  },
+  members: {
+    type: [{
+      memberId: { type: String, required: true },
+      memberName: { type: String, required: true }
+    }], }
 });
 
 module.exports = mongoose.model("room", RoomSchema);

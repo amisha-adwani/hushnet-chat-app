@@ -14,7 +14,7 @@ import Header from "./components/Header";
 import Home from './pages/Home'
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 function App() {
-  const [headerName, setHeaderName] = React.useState("");
+  const [headerName, setHeaderName] = React.useState("hushnet");
   const handleHeaderChange = (newHeader) => {
     setHeaderName(newHeader);
   };
@@ -43,7 +43,7 @@ function App() {
         <Router>
         <Header headerName={headerName} />
           <Routes>
-            <Route path="/" element={<Home onChangeHeader={handleHeaderChange}/>}></Route>
+            <Route path="/" element={<Home/>}></Route>
             <Route path="/profile" element={<Profile onChangeHeader={handleHeaderChange} />}></Route>
             <Route path="/room/" element={<AllRooms onChangeHeader={handleHeaderChange} />}></Route>
             <Route path="/room/:roomId" element={ <Room onChangeHeader={handleHeaderChange} />}></Route>

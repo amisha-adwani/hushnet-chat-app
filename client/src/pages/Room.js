@@ -5,7 +5,7 @@ import ChatContext from "../context/ChatContext";
 const Room = ({ onChangeHeader }) => {
   const params = useParams();
   const context = useContext(ChatContext);
-  const { socket,username } = context;
+  const { socket,senderId,username } = context;
   const roomId = params.roomId;
   const [userNotification, setUserNotification] = useState([]);
   useEffect(() => {
@@ -21,7 +21,7 @@ const Room = ({ onChangeHeader }) => {
         `${username} has left the room ${roomId}`,
       ]);
     });
-    socket.emit("join-room", { roomId,username });
+    socket.emit("join-room", { roomId,username,senderId });
      onChangeHeader(`${roomId}`);
   }, [socket]);
 

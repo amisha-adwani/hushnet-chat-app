@@ -17,6 +17,8 @@ const ChatBox = ({ userNotification }) => {
     messageReceived,
     socket,
     username,
+    senderId,
+    fetchRooms
   } = context;
   const { roomId } = useParams();
   useEffect(() => {
@@ -46,14 +48,16 @@ const ChatBox = ({ userNotification }) => {
     setMessage(e.target.value);
   };
   const navigate = useNavigate();
-  const senderId = socket.id;
+  // const senderId = socket.id;
   const onHandleClick = () => {
     socket.emit("leave-room", { roomId, senderId });
     navigate("/room");
   };
   const onDelete = () => {
     socket.emit("remove-room", { roomId, senderId });
+    console.log(senderId)
     navigate("/room");
+    fetchRooms()
   };
 
   return (

@@ -13,12 +13,11 @@ import { useNavigate } from "react-router-dom";
 import Link from '@mui/material/Link';
 import ChatContext from "../context/ChatContext";
 
-export default function SignUp() {
+export default function Login() {
   const context = useContext(ChatContext);
   const { socket,setUsername, username, setSenderId,senderId } = context;
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -26,39 +25,38 @@ export default function SignUp() {
     severity:"",
     message:"",
   })
+
     const handleSubmit = async (event) => {
     event.preventDefault();
-    const host = 'http://localhost:3001/auth/signup'
+    const host = 'http://localhost:3001/auth/login'
     const response = await fetch(`${host}`,{
       method: "POST",
       headers:{
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: credentials.name,
         email: credentials.email,
         password: credentials.password,
       }),
     })
     const json = await response.json();
-     
- 
+    console.log(json)
     if(json.success){
-      console.log(json)
-      const { data } = json;
-      console.log('json',json.user._id)
+      console.log('-------------------------')
       setSenderId(json.user._id)
       setUsername(json.user.name);
-      localStorage.setItem("token", json.authtoken);
-      console.log("authToken", "signup", json.authToken)
-      socket.emit("user-joined", {username, senderId});
+      localStorage.setItem("token", json.authToken)
+      // getdata
+
+      console.log("authToken login", json.authToken)
       navigate('/room');
-    setAlert({severity:'success', message:"successfully done"})
-    }else{
+    setAlert({severity:'success', message:"successfully logged in"})
+}else{
       setAlert({severity:'error',message:"Invalid details"})
     }
     
-    console.log({severity:alert.severity, message:alert.message})
+    setTimeout(() => setAlert(null), 1500);
+    console.log(alert)
     };
 
     const handleChange = (e) => {
@@ -76,27 +74,15 @@ export default function SignUp() {
               alignItems: 'center',
             }}
           >
-            <Alert severity={alert.severity}>{alert.message}</Alert>
+           { (alert!== null) && <Alert severity={alert.severity}>{alert.message}</Alert>}
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Signup
+              Login
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12} >
-                  <TextField
-                    autoComplete="given-name"
-                    name="name"
-                    required
-                    fullWidth
-                    id="Name"
-                    label="Name"
-                    autoFocus
-                    onChange={handleChange}
-                  />
-                </Grid>
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -126,14 +112,15 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                onClick={handleSubmit}
               >
-                Signup
+                Login
               </Button>
             </Box>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Have an account? Sign In"}
+                <Link href="#" variant="body2" >
+                  {"Have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
