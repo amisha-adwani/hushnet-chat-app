@@ -1,8 +1,7 @@
 import { React, useState } from "react";
 import ChatContext from "./ChatContext";
 import io from "socket.io-client";
-//const URL = "https://hushnet.onrender.com";
-const URL = "http://localhost:3001";
+const URL = process.env.REACT_APP_BASE_URL;
 const socket = io(URL);
 const ChatState = (props) => {
   const [message, setMessage] = useState([]);
@@ -15,8 +14,7 @@ const ChatState = (props) => {
   const fetchRooms = async () => {
     try {
       setLoading(true); 
-      // const fetchURL = "https://hushnet.onrender.com/room";
-      const fetchURL = "http://localhost:3001/room";
+      const fetchURL = process.env.REACT_APP_fetchURL;
       const res = await fetch(fetchURL);
       const { rooms } = await res.json();
       setRooms(rooms);

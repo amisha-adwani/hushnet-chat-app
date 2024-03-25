@@ -48,7 +48,6 @@ const ChatBox = ({ userNotification }) => {
     setMessage(e.target.value);
   };
   const navigate = useNavigate();
-  // const senderId = socket.id;
   const onHandleClick = () => {
     socket.emit("leave-room", { roomId, senderId });
     navigate("/room");

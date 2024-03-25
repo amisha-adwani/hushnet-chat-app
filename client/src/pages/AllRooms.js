@@ -77,13 +77,13 @@ const AllRooms = ({ onChangeHeader }) => {
         onClose={handleClose}
         placeholder={newRoomId}
       />
-      <Box sx={{mt:10, display:'flex', justifyContent:'space-between',mb: 3, ml:3,mr:3}}>
+      <Box sx={{mt:10, display:'flex', justifyContent:'space-between', ml:5,mr:5}}>
     
       <Button
        variant="contained"
        size="medium"
         onClick={handleOpen}
-        sx={{ height:50 }}
+        sx={{ height:50,ml:5 }}
         endIcon={<AddCircleOutlinedIcon/> }
       >
         New Room
@@ -92,7 +92,7 @@ const AllRooms = ({ onChangeHeader }) => {
            value={searchQuery}
            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search"
-            sx={{ width: 500 }}
+            sx={{ maxWidth: 300 }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -105,7 +105,7 @@ const AllRooms = ({ onChangeHeader }) => {
       </Box>
       {loading &&
       <Loading/>}
-      <Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               {errorMessage &&  (
           <Typography component="div" ml={2}>
             Error: {errorMessage}
@@ -113,8 +113,7 @@ const AllRooms = ({ onChangeHeader }) => {
         )}
         <TableContainer
           component={Paper}
-          sx={{ mx: 1, width: "99%", mb:3,overflowY: 'auto', height:495
-         }}
+          sx={{ ml:10, mt:3}}
         >
           <Table aria-label="simple table" height= "max-content">
             <TableBody>

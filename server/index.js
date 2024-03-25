@@ -7,7 +7,6 @@ const User = require("./models/User");
 const router = require("./routes/room");
 const authRouter = require("./routes/auth");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
 connectToMongo();
