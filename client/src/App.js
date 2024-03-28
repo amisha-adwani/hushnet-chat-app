@@ -6,20 +6,14 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import Profile from "./pages/Profile";
 import Room from "./pages/Room";
 import ChatState from "./context/ChatState";
 import AllRooms from "./pages/AllRooms";
-import Header from "./components/Header";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import SignUp from "./components/Signup";
 import Login from "./components/Login";
 
 function App() {
-  const [headerName, setHeaderName] = React.useState("hushnet");
-  const handleHeaderChange = (newHeader) => {
-    setHeaderName(newHeader);
-  };
 
   const theme = createTheme({
     palette: {
@@ -43,12 +37,11 @@ function App() {
     <div>
       <ChatState>
         <Router>
-        {/* <Header headerName={headerName}/> */}
           <Routes>
             <Route path="/signup" element={<SignUp/>}></Route>
-            <Route path="/profile" element={<Login/>}></Route>
-            <Route path="/room/" element={<AllRooms onChangeHeader={handleHeaderChange} />}></Route>
-            <Route path="/room/:roomId" element={ <Room onChangeHeader={handleHeaderChange} />}></Route>
+            <Route path="/" element={<Login/>}></Route>
+            <Route path="/room/" element={<AllRooms />}></Route>
+            <Route path="/room/:roomId" element={ <Room />}></Route>
           </Routes>
           <NavBar />
         </Router>

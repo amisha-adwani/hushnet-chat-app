@@ -54,14 +54,12 @@ const ChatBox = ({ userNotification }) => {
   };
   const onDelete = () => {
     socket.emit("remove-room", { roomId, senderId });
-    console.log(senderId)
-    navigate("/room");
-    fetchRooms()
+    navigate("/room/");
   };
 
   return (
     <div>
-      <Box height={530} overflow="auto">
+      <Box minHeight={570} ml={9} overflow="auto">
         <Button
           variant="contained"
           sx={{ textTransform: "none", mt: 9, mr: 2, ml: 2, mb: 2 }}
@@ -84,7 +82,7 @@ const ChatBox = ({ userNotification }) => {
           </Typography>
         )}
 
-        <Typography component="div" ml={2}>
+        <Typography component="div">
           {messageReceived.map((msg, index) => (
             <Box
             key={index}
@@ -94,12 +92,12 @@ const ChatBox = ({ userNotification }) => {
                 mr: 2,
                 mt: 1,
                 display:'flex',
-                maxWidth: "30%",
-                ...(msg.senderId === socket.id && { pl: 162 }),
+                minWidth: "30%",
+                ...(msg.senderId === senderId && { pl: 162 }),
                 wordWrap: "break-word",
               }}
             >
-              <Box sx={{...(msg.senderId === socket.id && { display: 'none' })}}>
+              <Box sx={{...(msg.senderId === senderId && { display: 'none' })}}>
             <Details name={msg.username}/> 
               </Box>
             <Box sx={ {bgcolor:'primary.main',p: 2,color:'primary.contrastText', borderRadius:3,width:150}}>
@@ -114,7 +112,7 @@ const ChatBox = ({ userNotification }) => {
         alignItems="center"
          mx={5}
         mt={2}
-        mb={8}
+        ml={10}
         sx={{  border:'1px solid lightblue',boxShadow:"4px 4px 4px  lightgray"}}
       
       >

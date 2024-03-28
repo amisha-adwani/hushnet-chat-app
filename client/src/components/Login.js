@@ -114,6 +114,15 @@ export default function Login() {
           >
             Login
           </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{  mb: 2 }}
+            onClick={()=> navigate("/room")}
+          >
+            Login as Guest
+          </Button>
         </Box>
         <Grid container>
           <Grid item>

@@ -18,7 +18,7 @@ import Loading from "../components/LoadingSpinner";
 import SearchIcon from "@mui/icons-material/Search";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-const AllRooms = ({ onChangeHeader }) => {
+const AllRooms = () => {
   const context = useContext(ChatContext);
   const { socket, username ,
     setErrorMessage,
@@ -49,14 +49,13 @@ const AllRooms = ({ onChangeHeader }) => {
 
   useEffect(() => {
     socket.on("error", handleError);
-   onChangeHeader(`welcome ${username}, join a chat or create your own`);
     fetchRooms();
     socket.on("created-room", handleCreateRoom);
 
     return () => {
       socket.off("created-room", handleCreateRoom);
     };
-    // eslint-disable-next-line 
+     // eslint-disable-next-line 
   }, [socket]);
 
   const handleOpen = () => setOpen(true);
@@ -105,7 +104,7 @@ const AllRooms = ({ onChangeHeader }) => {
       </Box>
       {loading &&
       <Loading/>}
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{  ml:10 }}>
               {errorMessage &&  (
           <Typography component="div" ml={2}>
             Error: {errorMessage}
@@ -113,7 +112,7 @@ const AllRooms = ({ onChangeHeader }) => {
         )}
         <TableContainer
           component={Paper}
-          sx={{ ml:10, mt:3}}
+          sx={{ mt:3}}
         >
           <Table aria-label="simple table" height= "max-content">
             <TableBody>
@@ -139,9 +138,6 @@ const AllRooms = ({ onChangeHeader }) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Box>
-      <Box>
-
       </Box>
     </>
   );

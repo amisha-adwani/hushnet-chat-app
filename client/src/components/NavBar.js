@@ -133,7 +133,7 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           {[
-            { text: "Profile", to: "/profile", icon: <AccountCircleIcon /> },
+            { text: "Profile", to: "/", icon: <AccountCircleIcon /> },
             { text: "Inbox", to: "/room", icon: <AllInboxIcon /> },
           ].map((item, index) => (
             <ListItem key={item.text} disablePadding sx={{ display: "block" }}>

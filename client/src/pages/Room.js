@@ -2,7 +2,7 @@ import { React, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
 import ChatContext from "../context/ChatContext";
-const Room = ({ onChangeHeader }) => {
+const Room = () => {
   const params = useParams();
   const context = useContext(ChatContext);
   const { socket,senderId,username } = context;
@@ -22,7 +22,7 @@ const Room = ({ onChangeHeader }) => {
       ]);
     });
     socket.emit("join-room", { roomId,username,senderId });
-     onChangeHeader(`${roomId}`);
+     // eslint-disable-next-line 
   }, [socket]);
 
   return (

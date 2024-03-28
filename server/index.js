@@ -28,39 +28,47 @@ io.on("connection", (socket) => {
   socket.on("send_message", ({ message, roomId, senderId, username }) => {
     io.to(roomId).emit("receive_message", { message, senderId, username });
   });
+
   socket.on("create-room", async ({ newRoomId, senderId, username }) => {
-    const room = new Room({
-      roomId: newRoomId,
-      members: [{ memberId: senderId, memberName: username }],
-    });
-    room.save();
-    socket.broadcast.emit("created-room", { newRoomId });
-    const userId = new ObjectId(senderId);
-    const user = await User.findOne({ _id: userId });
-    if (user) {
-      await User.findOneAndUpdate(
-        { _id: userId },
-        { $push: { roomsOwned: newRoomId } }
-      );
+    try {
+      const userId = new ObjectId(senderId);
+      const user = await User.findOne({ _id: userId });
+      if (user) {
+      const room = new Room({
+        roomId: newRoomId,
+        members: [{ memberId: senderId, memberName: username }],
+      });
+      await room.save();
+      socket.broadcast.emit("created-room", { newRoomId });
+  
+      
+        await User.findOneAndUpdate(
+          { _id: userId },
+          { $push: { roomsOwned: newRoomId } }
+        );
+      }
+    } catch (error) {
+          socket.emit("error",  "Please login to continue");
+       
     }
-  });
+});
+
   socket.on("remove-room", async ({ roomId, senderId }) => {
     try {
       const userId = new ObjectId(senderId);
       const user = await User.findOne({ _id: userId });
-      const matcher = user._id.equals(userId);
-
-      if (matcher) {
+      if (user) {
         if (user.roomsOwned.includes(roomId)) {
-         Room.deleteOne({ roomId: roomId })
+          user.roomsOwned = user.roomsOwned.filter(id => id !== roomId);
+          user.save()
+        await Room.deleteOne({ roomId: roomId })
+         console.log("deleted");
         } else {
-          console.log("error");
+          socket.emit("error", "You are not the owner of the room");
         }
-      } else {
-        console("ERROR");
       }
     } catch (error) {
-      console.error("Error finding user:", error);
+      socket.emit("error", "Please login to continue");
     }
   });
 
